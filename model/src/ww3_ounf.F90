@@ -2355,12 +2355,12 @@ CONTAINS
                   END IF ! RTDL
 #endif
                   IF(FL_DEFAULT_GBL_META) THEN
-                    WRITE(STR2,'(F12.0)') SY
+                    WRITE(STR2,'(F12.6)') SY
                     STR2=ADJUSTL(STR2)
                     IRET=NF90_PUT_ATT(NCID,NF90_GLOBAL,   &
                          'latitude_resolution', TRIM(STR2))
                     CALL CHECK_ERR(IRET)
-                    WRITE(STR2,'(F12.0)') SX
+                    WRITE(STR2,'(F12.6)') SX
                     STR2=ADJUSTL(STR2)
                     IRET=NF90_PUT_ATT(NCID,NF90_GLOBAL,   &
                          'longitude_resolution',TRIM(STR2))
@@ -2388,9 +2388,9 @@ CONTAINS
               ! Finishes declaration part in file by adding geographical bounds
               IF(FL_DEFAULT_GBL_META) THEN
                 IF(SMCGRD) THEN
-                  WRITE(STR2,'(F12.0)') MINVAL(LAT)
+                  WRITE(STR2,'(F12.6)') MINVAL(LAT)
                 ELSE
-                  WRITE(STR2,'(F12.0)') MINVAL(YGRD)
+                  WRITE(STR2,'(F12.6)') MINVAL(YGRD)
                 ENDIF
                 STR2=ADJUSTL(STR2)
                 IRET=NF90_PUT_ATT(NCID,NF90_GLOBAL,  &
@@ -2398,9 +2398,9 @@ CONTAINS
                 CALL CHECK_ERR(IRET)
 
                 IF(SMCGRD) THEN
-                  WRITE(STR2,'(F12.0)') MAXVAL(LAT)
+                  WRITE(STR2,'(F12.6)') MAXVAL(LAT)
                 ELSE
-                  WRITE(STR2,'(F12.0)') MAXVAL(YGRD)
+                  WRITE(STR2,'(F12.6)') MAXVAL(YGRD)
                 ENDIF
                 STR2=ADJUSTL(STR2)
                 IRET=NF90_PUT_ATT(NCID,NF90_GLOBAL,  &
@@ -2408,9 +2408,9 @@ CONTAINS
                 CALL CHECK_ERR(IRET)
 
                 IF(SMCGRD) THEN
-                  WRITE(STR2,'(F12.0)') MINVAL(LON)
+                  WRITE(STR2,'(F12.6)') MINVAL(LON)
                 ELSE
-                  WRITE(STR2,'(F12.0)') MINVAL(XGRD)
+                  WRITE(STR2,'(F12.6)') MINVAL(XGRD)
                 ENDIF
                 STR2=ADJUSTL(STR2)
                 IRET=NF90_PUT_ATT(NCID,NF90_GLOBAL,  &
@@ -2419,9 +2419,9 @@ CONTAINS
 
 
                 IF(SMCGRD) THEN
-                  WRITE(STR2,'(F12.0)') MAXVAL(LON)
+                  WRITE(STR2,'(F12.6)') MAXVAL(LON)
                 ELSE
-                  WRITE(STR2,'(F12.0)') MAXVAL(XGRD)
+                  WRITE(STR2,'(F12.6)') MAXVAL(XGRD)
                 ENDIF
                 STR2=ADJUSTL(STR2)
                 IRET=NF90_PUT_ATT(NCID,NF90_GLOBAL,  &
