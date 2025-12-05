@@ -1,0 +1,25 @@
+--- w3odatmd.F90	2025-10-29 17:12:10.578116401 -0400
++++ w3odatmd.F90.238cd41.owi	2025-11-04 16:22:21.360524222 -0500
+@@ -325,21 +325,21 @@
+   !/
+   !/ Conventional declarations
+   !/
+   INTEGER                 :: NOUTP = -1, IOUTP = -1, IOSTYP = 1
+   !
+   INTEGER, PARAMETER      :: NOGRP = 10
+   INTEGER, PARAMETER      :: NGRPP = 20
+   INTEGER, PARAMETER      :: DIMP = 15
+   INTEGER                 :: NOGE(NOGRP)
+   INTEGER                 :: NOTYPE
+-  INTEGER, PARAMETER      :: NOEXTR=  2
++  INTEGER, PARAMETER      :: NOEXTR = 20
+   CHARACTER(LEN=20)       :: IDOUT(NOGRP,NGRPP)
+   CHARACTER(LEN=80)       :: FNMPRE = './'
+ 
+   ! SET GLOBAL PATH FOR USER DEFINED OUTPUT, DEFAULT CURRENT PATH
+   CHARACTER(LEN=256)       :: FNMGRD = './'
+   CHARACTER(LEN=256)       :: FNMPNT = './'
+   CHARACTER(LEN=256)       :: FNMRST = './'
+ 
+   !Moved UNDEF to constants and included above
+   !REAL                    :: UNDEF = -999.9

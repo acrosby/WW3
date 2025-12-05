@@ -1,0 +1,271 @@
+--- w3iogomd.F90	2025-10-29 16:54:26.439493631 -0400
++++ w3iogomd.F90.c139064.owi	2025-11-13 15:17:32.907784657 -0500
+@@ -145,20 +145,25 @@
+   !       !/S     Enable subroutine tracing.
+   !       !/T     Test output.
+   !
+   !  7. Source code :
+   !
+   !/ ------------------------------------------------------------------- /
+ #ifdef W3_S
+   USE W3SERVMD, ONLY : STRACE
+ #endif
+   !/
++  !/ Import the OWI ComputeFields module
++  USE modStandardTypes
++  USE modMessage
++  USE modComputeFields
++  USE modOcean
+   PUBLIC
+   CHARACTER(LEN=1024)                   :: FLDOUT
+   !/
+   !/ Private parameter statements (ID strings)
+   !/
+   CHARACTER(LEN=10), PARAMETER, PRIVATE :: VEROGR = '2019-10-04'
+   CHARACTER(LEN=30), PARAMETER, PRIVATE ::                        &
+        IDSTR = 'WAVEWATCH III GRID OUTPUT FILE'
+   !/
+ CONTAINS
+@@ -1161,21 +1166,75 @@
+       I = 9
+       J = 5
+       !
+       ! Group 10
+       !
+     CASE('U1')
+       I = 10
+       J = 1
+     CASE('U2')
+       I = 10
+-      J = 1
++      J = 2
++    CASE('U3')
++      I = 10
++      J = 3
++    CASE('U4')
++      I = 10
++      J = 4
++    CASE('U5')
++      I = 10
++      J = 5
++    CASE('U6')
++      I = 10
++      J = 6
++    CASE('U7')
++      I = 10
++      J = 7
++    CASE('U8')
++      I = 10
++      J = 8
++    CASE('U9')
++      I = 10
++      J = 9
++    CASE('U10')
++      I = 10
++      J = 10
++    CASE('U11')
++      I = 10
++      J = 11
++    CASE('U12')
++      I = 10
++      J = 12
++    CASE('U13')
++      I = 10
++      J = 13
++    CASE('U14')
++      I = 10
++      J = 14
++    CASE('U15')
++      I = 10
++      J = 15
++    CASE('U16')
++      I = 10
++      J = 16
++    CASE('U17')
++      I = 10
++      J = 17
++    CASE('U18')
++      I = 10
++      J = 18
++    CASE('U19')
++      I = 10
++      J = 19
++    CASE('U20')
++      I = 10
++      J = 20
+       ! Not found:
+ #ifdef W3_COU
+     CASE('DRY')
+ #endif
+     CASE('UNSET')
+     CASE DEFAULT
+       I = -1
+       J = -1
+       IF ( IAPROC .EQ. NAPOUT ) WRITE (NDSEN,1004) TRIM(FLD)
+     END SELECT
+@@ -1294,20 +1353,21 @@
+     !
+     !     !/S     Enable subroutine tracing.
+     !     !/T     Test output.
+     !
+     ! 10. Source code :
+     !
+     !/ ------------------------------------------------------------------- /
+     USE CONSTANTS
+     USE W3GDATMD
+     USE W3WDATMD, ONLY: UST, FPIS
++    USE W3ADATMD, ONLY: UA, UD ! OWI fields need wind
+     USE W3ADATMD, ONLY: CG, WN, DW
+     USE W3ADATMD, ONLY: HS, WLM, T02, T0M1, T01, FP0,               &
+          THM, THS, THP0
+     USE W3ADATMD, ONLY: ABA, ABD, UBA, UBD, FCUT, SXX,              &
+          SYY, SXY, PHS, PTP, PLP, PDIR, PSI, PWS,    &
+          PWST, PNR, USERO, TUSX, TUSY, PRMS, TPMS,   &
+          USSX, USSY, MSSX, MSSY, MSSD, MSCX, MSCY,   &
+          MSCD, CHARN,                                &
+          BHD, CGE, P2SMS, US3D, EF, TH1M, STH1M,     &
+          TH2M, STH2M, HSIG, STMAXE, STMAXD,          &
+@@ -1370,39 +1430,46 @@
+          PHI(21,NSEAL),PHIST(NSEAL),         &
+          EBC(NK,NSEAL), ABP(NSEAL),           &
+          STMAXDL(NSEAL), TLPHI(NSEAL),        &
+          WL02X(NSEAL), WL02Y(NSEAL),          &
+          ALPXT(NSEAL), ALPYT(NSEAL),          &
+          ALPXY(NSEAL), SCREST(NSEAL),         &
+          QK1(NSEAL), QK2(NSEAL)
+     REAL                       USSCO, FT1
+     REAL, SAVE              :: HSMIN = 0.01
+     LOGICAL                 :: FLOLOC(NOGRP,NGRPP)
++    !/ --- OWI Types ---- /
++    type(SpectraSettings) :: tSpecSettings(NSEAL), ISpecSetting
++    type(WaveFields) :: tWaveFields(NSEAL), IWaveField
++    type(ErrorType) :: tError
++    real(single_k) :: sFreq(NK), sDirsIn(NTH)
+     !/
+     !/ ------------------------------------------------------------------- /
+     !/
+ #ifdef W3_S
+     CALL STRACE (IENT, 'W3OUTG')
+ #endif
+     DO I=1,NOGRP
+       DO J=1,NGRPP
+         FLOLOC(I,J) =   &
+              ((FLOUTG.AND.FLOGRD(I,J)).OR.(FLOUTG2.AND.FLOGR2(I,J)))
+       END DO
+     END DO
+     !
+     FXPMC  = 0.66 * GRAV / 28.
+     HSMIN  = HSMIN
+     FT1    =  0.3333 * SIG(NK)**2 * DTH * SIG(NK)
+     !
+     ! 1.  Initialize storage arrays -------------------------------------- *
+     !
++    ! OWI
++    USERO  = 0.
+     ET     = 0.
+     ET02   = 0.
+     EWN    = 0.
+     ETR    = 0.
+     ET1    = 0.
+     EET1   = 0.
+     ETX    = 0.
+     ETY    = 0.
+     ETXX   = 0.
+     ETYY   = 0.
+@@ -1980,20 +2047,38 @@
+       UBS(JSEA) = UBS(JSEA) + FTWL * EBAND/GRAV
+     END DO
+     !
+ #ifdef W3_OMPG
+     !$OMP END PARALLEL DO
+ #endif
+     !
+     SXX    = SXX * DWAT * GRAV
+     SYY    = SYY * DWAT * GRAV
+     SXY    = SXY * DWAT * GRAV
++    ! Add the OWI SpectraSettings type creation here before the 
++    ! the parallel loop through the grid points.
++    sFreq = sfn_compute_sfreqarray(FR1,XFR,NK)
++    sDirsIn(:) = MOD((450. - TH*RADE), 360.)
++    DO JSEA=1, NSEAL
++      CALL INIT_GET_ISEA(ISEA, JSEA)
++      Call sb_Fill_SpectraSettings(tSpecSettings(JSEA),NTH,NK,     &
++        sFreq,XFR,sDirsIn,RADE*(TH(1)-(DTH/2.)), &
++        10,49,.FALSE.,.TRUE.,tError)
++      do IK=1,NK
++        tSpecSettings(JSEA)%sFactor2(IK,:) = DDEN(IK) / CG(IK,ISEA)
++      enddo
++      IF ( bFn_IsError(tError) ) THEN
++        Call sb_ErrWrite(tError)
++        STOP "!!!!!!     OWI ERROR FILLING tSpecSettings     !!!!!!!"
++      ENDIF
++    END DO
++    !
+     !
+ #ifdef W3_OMPG
+     !$OMP PARALLEL DO PRIVATE(JSEA,ISEA,IX,IY)
+ #endif
+     !
+     DO JSEA=1, NSEAL
+       CALL INIT_GET_ISEA(ISEA, JSEA)
+       IX     = MAPSF(ISEA,1)
+       IY     = MAPSF(ISEA,2)
+       IF ( MAPSTA(IY,IX) .GT. 0 ) THEN
+@@ -2044,20 +2129,57 @@
+         IF ( ET02(JSEA) .GT. 1.E-7  .AND.  ET(JSEA) .GT. 0 ) THEN
+           T02(JSEA) = TPI * SQRT(ET(JSEA) / ET02(JSEA) )
+           T01(JSEA) = TPI * ET(JSEA) / ET1(JSEA)
+         ELSE
+           T02(JSEA) = TPI / SIG(NK)
+           T01(JSEA)= T02(JSEA)
+         ENDIF
+         !
+         !  Add here USERO(JSEA,1) ...
+         !
++        ! Add OWI call to compute fields subroutine
++        ! wonder if tSpecSettings and tWaveFields need to be
++        ! allocated to NSEAL in the loop here?
++        Call sb_ComputeFields(tWaveFields(JSEA),tSpecSettings(JSEA), &
++          UA(ISEA), &
++          MOD(630.-(UD(ISEA)*180./G_PI_C), 360.), &
++          0.,TRANSPOSE(A(:, :, JSEA)), NK,NTH,tError)
++        USERO(JSEA, 1) = sfn_ETOT_to_Hs(tWaveFields(JSEA)%sETotSea)
++        USERO(JSEA, 2) = sfn_TurnWave180(tWaveFields(JSEA)%sVMDSea)
++        USERO(JSEA, 3) = tWaveFields(JSEA)%sTPSea
++
++        USERO(JSEA, 4) = sfn_ETOT_to_Hs(tWaveFields(JSEA)%sETotSwell)
++        USERO(JSEA, 5) = sfn_TurnWave180(tWaveFields(JSEA)%sVMDSwell)
++        USERO(JSEA, 6) = tWaveFields(JSEA)%sTPSwell
++
++        USERO(JSEA, 7) = sfn_ETOT_to_Hs(tWaveFields(JSEA)%sETotTr1)
++        USERO(JSEA, 8) = sfn_TurnWave180(tWaveFields(JSEA)%sVMDTr1)
++        USERO(JSEA, 9) = tWaveFields(JSEA)%sTPTr1
++
++        USERO(JSEA, 10) = sfn_ETOT_to_Hs(tWaveFields(JSEA)%sETotTr2)
++        USERO(JSEA, 11) = sfn_TurnWave180(tWaveFields(JSEA)%sVMDTr2)
++        USERO(JSEA, 12) = tWaveFields(JSEA)%sTPTr3
++
++        USERO(JSEA, 13) = sfn_ETOT_to_Hs(tWaveFields(JSEA)%sETotTr3)
++        USERO(JSEA, 14) = sfn_TurnWave180(tWaveFields(JSEA)%sVMDTr3)
++        USERO(JSEA, 15) = tWaveFields(JSEA)%sTPTr3
++
++        USERO(JSEA, 16) = tWaveFields(JSEA)%sInline
++        USERO(JSEA, 17) = tWaveFields(JSEA)%sDomDir
++        USERO(JSEA, 18) = tWaveFields(JSEA)%sAngSpr
++        USERO(JSEA, 19) = tWaveFields(JSEA)%sMo1
++        USERO(JSEA, 20) = tWaveFields(JSEA)%sMo2
++
++        IF ( bFn_IsError(tError) ) THEN
++          Call sb_ErrWrite(tError)
++          STOP "!!!!!!     OWI OUTPUT ERROR     !!!!!!!"
++        ENDIF
+       END IF
+     END DO
+     !
+ #ifdef W3_OMPG
+     !$OMP END PARALLEL DO
+ #endif
+     !
+     ! 3.b Clean-up small values if !/O8 switch selected
+     !
+ #ifdef W3_O8

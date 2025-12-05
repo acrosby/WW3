@@ -1,0 +1,48 @@
+--- ../model/src/CMakeLists.txt	2025-11-04 14:37:15.683762378 -0500
++++ ../model/src/CMakeLists.txt.0a9e10f.owi	2025-11-03 18:24:15.675587198 -0500
+@@ -60,21 +60,21 @@
+ 
+   if(APPLE)
+     # The linker on macOS does not include `common symbols` (usually module variables without a default value) by default
+     # Passing the -c flag includes them and fixes an error with undefined symbols
+     # Only ifort marks these symbols as common, compared to GCC
+     set(CMAKE_Fortran_ARCHIVE_FINISH "<CMAKE_RANLIB> -c <TARGET>")
+     set(CMAKE_C_ARCHIVE_FINISH "<CMAKE_RANLIB> -c <TARGET>")
+   endif()
+ 
+ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
+-  set(compile_flags -g -fno-second-underscore -ffree-line-length-none)
++  set(compile_flags -g -fno-second-underscore -ffree-line-length-none -fdec)
+   set(compile_flags_release -O3)
+   set(compile_flags_debug -Wall -fcheck=all -ffpe-trap=invalid,zero,overflow -frecursive -fbacktrace)
+   
+   if(${CMAKE_Fortran_COMPILER_VERSION} VERSION_GREATER_EQUAL 10)
+     target_compile_options(ww3_lib PUBLIC -fallow-argument-mismatch)
+   endif()
+ 
+ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "PGI")
+   set(compile_flags -g -i4 -r4 -Kieee)
+   set(compile_flags_release -O3)
+@@ -89,21 +89,21 @@
+   set(compile_flags -g -sdefault32 -eg)
+   set(compile_flags_release -O3)
+   set(compile_flags_debug -O0 -Rbcps -Ktrap=fp)
+ endif()
+ 
+ # Executables to always build
+ set(programs ww3_strt ww3_grid ww3_bound ww3_outf ww3_outp ww3_trck ww3_grib
+   ww3_gint gx_outf gx_outp ww3_uprstr ww3_shel ww3_prep ww3_gspl ww3_multi ww3_systrk)
+ 
+ # Executables to build if NetCDF is found
+-set(netcdf_programs ww3_ounf ww3_ounp ww3_bounc ww3_trnc ww3_prnc)
++set(netcdf_programs ww3_ounf ww3_ounp ww3_bounc ww3_bounc1 ww3_trnc ww3_prnc)
+ 
+ if("OASIS" IN_LIST switches)
+   find_package(OASIS REQUIRED)
+   target_link_libraries(ww3_lib PUBLIC OASIS::OASIS)
+   find_package(MPI REQUIRED COMPONENTS Fortran)
+   target_link_libraries(ww3_lib PUBLIC MPI::MPI_Fortran)
+ endif()
+ 
+ if(NETCDF)
+   if("netcdf" IN_LIST EXCLUDE_FIND)

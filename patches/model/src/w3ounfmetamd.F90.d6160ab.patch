@@ -1,0 +1,272 @@
+--- w3ounfmetamd.F90	2025-10-30 11:06:28.836557774 -0400
++++ w3ounfmetamd.F90.d6160ab.owi	2025-11-03 17:39:43.742089838 -0500
+@@ -4063,27 +4063,262 @@
+     META(1)%ENAME  = '.cfk'
+     META(1)%VARNM='cfk'
+     META(1)%VARNL='maximum cfl for frequency advection'
+     !META(1)%VARNS='maximum_cfl_for_frequency_advection'
+     META(1)%VARNS=''
+     META(1)%VARNG='maximum_cfl_for_frequency_advection'
+     META(1)%VMIN = 0
+     META(1)%VMAX = 320
+     !
+     ! ------ Group 10 (User defined) -------
++    ! ------ OWI Osmosis Fields with modComputeFields -------
+     !
+-    ! IFI=10, IFJ=1
++    ! IFI=10, IFJ=1, USER
+     META => GROUP(10)%FIELD(1)%META
++    META(1)%FSC    = 0.002
++    META(1)%UNITS  = 'm'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 64
++    META(1)%ENAME = '.hstotsea'
++    META(1)%VARNM = 'hstotsea'
++    META(1)%VARNL = 'Significant Wave Height of Wind Waves (OWI)' 
++    META(1)%VARNS = 'sea_surface_wind_wave_significant_height'
++    META(1)%VARNG = 'sea_surface_wind_wave_significant_height'
++    !
++    ! IFI=10, IFJ=2, USER
++    META => GROUP(10)%FIELD(2)%META
++    META(1)%FSC    = 0.1
++    META(1)%UNITS  = 'degrees'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 360.0 
++    META(1)%ENAME = '.vmddirse'
++    META(1)%VARNM = 'vmdsea'
++    META(1)%VARNL = 'Vector Mean Direction of Wind Waves (OWI)'
++    META(1)%VARNS = 'sea_surface_wind_wave_from_direction'
++    META(1)%VARNG = 'wave_from_direction'
++    !
++    ! IFI=10, IFJ=3, USER
++    META => GROUP(10)%FIELD(3)%META
++    META(1)%FSC    = 0.001
++    META(1)%UNITS  = 's'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 50
++    META(1)%ENAME = '.owitpse'
++    META(1)%VARNM = 'tpsea'
++    META(1)%VARNL = 'Peak Spectral Period of Wind Waves (OWI)'
++    META(1)%VARNS = 'sea_surface_wave_period_at_variance_spectral_density_maximum'
++    META(1)%VARNG = 'sea_surface_wave_period_at_variance_spectral_density_maximum'
++    !
++    ! IFI=10, IFJ=4, USER
++    META => GROUP(10)%FIELD(4)%META
++    META(1)%FSC    = 0.002
++    META(1)%UNITS  = 'm'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 64
++    META(1)%ENAME = '.hstotswell'
++    META(1)%VARNM = 'hstotswell'
++    META(1)%VARNL = 'Significant Wave Height of Swell Waves (OWI)' 
++    META(1)%VARNS = 'sea_surface_swell_wave_significant_height'
++    META(1)%VARNG = 'sea_surface_swell_wave_significant_height'
++    !
++    ! IFI=10, IFJ=5, USER
++    META => GROUP(10)%FIELD(5)%META
++    META(1)%FSC    = 0.1
++    META(1)%UNITS  = 'degrees'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 360.0
++    META(1)%ENAME = '.owidirsw'
++    META(1)%VARNM = 'vmdswell'
++    META(1)%VARNL = 'Vector Mean Direction of Swell Waves (OWI)'
++    META(1)%VARNS = 'sea_surface_swell_wave_from_direction'
++    META(1)%VARNG = 'sea_surface_swell_wave_from_direction'
++    !
++    ! IFI=10, IFJ=6, USER
++    META => GROUP(10)%FIELD(6)%META
++    META(1)%FSC    = 0.001
++    META(1)%UNITS  = 's'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 50
++    META(1)%ENAME = '.owitpsw'
++    META(1)%VARNM = 'tpswell'
++    META(1)%VARNL = 'Peak Spectral Period of Swell Waves (OWI)' 
++    META(1)%VARNS = 'sea_surface_wave_period_at_variance_spectral_density_maximum'
++    META(1)%VARNG = 'sea_surface_wave_period_at_variance_spectral_density_maximum'
++    !
++    ! IFI=10, IFJ=7, USER
++    META => GROUP(10)%FIELD(7)%META
++    META(1)%FSC    = 0.002
++    META(1)%UNITS  = 'm'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 64
++    META(1)%ENAME = '.owiht1'
++    META(1)%VARNM = 'hstot1'
++    META(1)%VARNL = 'Significant Wave Height of First Wave Train (OWI)' 
++    META(1)%VARNS = 'sea_surface_wave_significant_height_partition_1'
++    META(1)%VARNG = 'sea_surface_wave_significant_height_partition_1'
++    !
++    ! IFI=10, IFJ=8, USER
++    META => GROUP(10)%FIELD(8)%META
++    META(1)%FSC    = 0.1
++    META(1)%UNITS  = 'degrees'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 360.0
++    META(1)%ENAME = '.owidir2'
++    META(1)%VARNM = 'vmd1'
++    META(1)%VARNL = 'Vector Mean Direction of First Wave Train (OWI)'
++    META(1)%VARNS = 'sea_surface_wave_from_direction_partition_1'
++    META(1)%VARNG = 'wave_from_direction_partition_1' 
++    !
++    ! IFI=10, IFJ=9, USER
++    META => GROUP(10)%FIELD(9)%META
++    META(1)%FSC    = 0.001
++    META(1)%UNITS  = 's'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 50
++    META(1)%ENAME = '.owitp1'
++    META(1)%VARNM = 'tp1'
++    META(1)%VARNL = 'Peak Spectral Period of First Wave Train (OWI)' 
++    META(1)%VARNS = 'sea_surface_wave_period_at_variance_spectral_density_maximum'
++    META(1)%VARNG = 'sea_surface_wave_period_at_variance_spectral_density_maximum'
++    !
++    ! IFI=10, IFJ=10, USER
++    META => GROUP(10)%FIELD(10)%META
++    META(1)%FSC    = 0.002
++    META(1)%UNITS  = 'm'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 64
++    META(1)%ENAME = '.owiht2'
++    META(1)%VARNM = 'hstot2'
++    META(1)%VARNL = 'Significant Wave Height of Second Wave Train (OWI)' 
++    META(1)%VARNS = 'sea_surface_wave_significant_height_partition_2'
++    META(1)%VARNG = 'sea_surface_wave_significant_height_partition_2'
++    !
++    ! IFI=10, IFJ=11, USER
++    META => GROUP(10)%FIELD(11)%META
+     META(1)%FSC    = 0.1
++    META(1)%UNITS  = 'degrees'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 360.0
++    META(1)%ENAME = '.owidir2'
++    META(1)%VARNM = 'vmd2'
++    META(1)%VARNL = 'Vector Mean Direction of Second Wave Train (OWI)' 
++    META(1)%VARNS = 'sea_surface_wave_from_direction_partition_2'
++    META(1)%VARNG = 'wave_from_direction_from_partition_2'
++    !
++    ! IFI=10, IFJ=12, USER
++    META => GROUP(10)%FIELD(12)%META
++    META(1)%FSC    = 0.001
++    META(1)%UNITS  = 's'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 50 
++    META(1)%ENAME = '.owitp2'
++    META(1)%VARNM = 'tp2'
++    META(1)%VARNL = 'Peak Spectral Period of Second Wave Train (OWI)' 
++    META(1)%VARNS = 'sea_surface_wave_period_at_variance_spectral_density_maximum'
++    META(1)%VARNG = 'sea_surface_wave_period_at_variance_spectral_density_maximum'
++    !
++    ! IFI=10, IFJ=13, USER
++    META => GROUP(10)%FIELD(13)%META
++    META(1)%FSC    = 0.002
+     META(1)%UNITS  = 'm'
+     META(1)%VMIN = 0
+-    META(1)%VMAX = 0
+-    WRITE (META(1)%ENAME,'(A2,I2.2)') '.u'
+-    WRITE (META(1)%VARNM,'(A1,I2.2)') 'u'
+-    WRITE (META(1)%VARNL,'(A12,I2.2)') 'User_defined'
+-    WRITE (META(1)%VARNS,'(A12,I2.2)') 'User_defined'
+-    WRITE (META(1)%VARNG,'(A12,I2.2)') 'user_defined'
++    META(1)%VMAX = 64
++    META(1)%ENAME = '.owiht3'
++    META(1)%VARNM = 'hstot3'
++    META(1)%VARNL = 'Significant Wave Height of Third Wave Train (OWI)' 
++    META(1)%VARNS = 'sea_surface_wave_significant_height_partition_3'
++    META(1)%VARNG = 'sea_surface_wave_significant_height_partition_3'
++    !
++    ! IFI=10, IFJ=14, USER
++    META => GROUP(10)%FIELD(14)%META
++    META(1)%FSC    = 0.1
++    META(1)%UNITS  = 'degrees'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 360.0
++    META(1)%ENAME = '.owidir3'
++    META(1)%VARNM = 'vmd3'
++    META(1)%VARNL = 'Vector Mean Direction of Third Wave Train (OWI)' 
++    META(1)%VARNS = 'sea_surface_wave_from_direction_partition_3'
++    META(1)%VARNG = 'wave_from_direction_partition_3'
++    !
++    ! IFI=10, IFJ=15, USER
++    META => GROUP(10)%FIELD(15)%META
++    META(1)%FSC    = 0.001
++    META(1)%UNITS  = 's'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 50
++    META(1)%ENAME = '.owitp3'
++    META(1)%VARNM = 'tp3'
++    META(1)%VARNL = 'Peak Spectral Period of Third Wave Train(OWI)' 
++    META(1)%VARNS = 'sea_surface_wave_period_at_variance_spectral_density_maximum'
++    META(1)%VARNG = 'sea_surface_wave_period_at_variance_spectral_density_maximum'
++    !
++    ! IFI=10, IFJ=16, USER
++    META => GROUP(10)%FIELD(16)%META
++    META(1)%FSC    = 0.001
++    META(1)%UNITS  = '1'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 1.0
++    META(1)%ENAME = '.owiinline'
++    META(1)%VARNM = 'inline_variance'
++    META(1)%VARNL = 'Inline Variance Ratio (OWI)' 
++    META(1)%VARNS = 'sea_surface_wave_directional_inline_variance_ratio'
++    META(1)%VARNG = 'sea_surface_wave_directional_inline_variance_ratio'
++    META(1)%VARNC = 'Haring and Heideman (1978), OTC 3230'
++    !
++    ! IFI=10, IFJ=17, USER
++    META => GROUP(10)%FIELD(17)%META
++    META(1)%FSC    = 0.1
++    META(1)%UNITS  = 'degrees'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 360.0
++    META(1)%ENAME = '.owidom'
++    META(1)%VARNM = 'dominant_dir'
++    META(1)%VARNL = 'Dominant Direction (OWI)' 
++    META(1)%VARNS = 'sea_surface_wave_dominant_direction'
++    META(1)%VARNG = 'sea_surface_wave_dominant_direction'
++    META(1)%VARNC = 'Haring and Heideman (1978), OTC 3230'
++    !
++    ! IFI=10, IFJ=18, USER
++    META => GROUP(10)%FIELD(18)%META
++    META(1)%FSC    = 0.001
++    META(1)%UNITS  = '1'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 1.0
++    META(1)%ENAME = '.owispr'
++    META(1)%VARNM = 'angular_spreading_function'
++    META(1)%VARNL = 'Angular Spreading Function (OWI)' 
++    META(1)%VARNS = 'sea_surface_wave_directional_spreading_function'
++    META(1)%VARNG ='sea_surface_wave_directional_spreading_function'
++    META(1)%VARNC = 'Parameterization of the width of a circular normal distribution (Gumbel, Greenwood and Durand, 1953)'
++    !
++    ! IFI=10, IFJ=19, USER
++    META => GROUP(10)%FIELD(19)%META
++    META(1)%FSC    = 0.002
++    META(1)%UNITS  = 'm2 s-1'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 64
++    META(1)%ENAME = '.owimo1'
++    META(1)%VARNM = 'mo1'
++    META(1)%VARNL = 'First Spectral Moment of Total Spectrum (OWI)' 
++    META(1)%VARNS = 'sea_surface_wave_variance_spectral_first_moment'
++    META(1)%VARNG = 'sea_surface_wave_variance_spectral_first_moment'
++    META(1)%VARNC = 'Haring and Heideman (1978), OTC 3230'
++    !
++    ! IFI=10, IFJ=20, USER
++    META => GROUP(10)%FIELD(20)%META
++    META(1)%FSC    = 0.002
++    META(1)%UNITS  = 'm2 s-2'
++    META(1)%VMIN = 0
++    META(1)%VMAX = 64
++    META(1)%ENAME = '.owimo2'
++    META(1)%VARNM = 'mo2'
++    META(1)%VARNL = 'Second Spectral Moment of Total Spectum (OWI)' 
++    META(1)%VARNS = 'sea_surface_wave_variance_spectral_second_moment'
++    META(1)%VARNG = 'sea_surface_wave_variance_spectral_second_moment'
++    META(1)%VARNC = 'Haring and Heideman (1978), OTC 3230'
++    !
+     !
+   END SUBROUTINE DEFAULT_META
+   !/ ------------------------------------------------------------------- /
+ 
+ END MODULE W3OUNFMETAMD

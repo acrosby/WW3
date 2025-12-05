@@ -1,0 +1,24 @@
+--- ../model/src/cmake/src_list.cmake	2025-10-28 16:39:58.489605565 -0400
++++ ../model/src/cmake/src_list.cmake.0a9e10f.owi	2025-10-30 15:33:41.307079676 -0400
+@@ -1,14 +1,21 @@
+ set(c_src w3getmem.c)
+ 
+ # Core files always built
+ set(ftn_src
++  modStandardTypes.for
++  modMessage.for
++  modAllocate.for
++  modDates.for
++  modStrings.for
++  modOcean.for
++  modComputeFields.for
+   constants.F90
+   w3adatmd.F90
+   w3arrymd.F90
+   w3bullmd.F90
+   w3cspcmd.F90
+   w3dispmd.F90
+   w3fldsmd.F90
+   w3gdatmd.F90
+   w3gridmd.F90
+   w3gsrumd.F90
