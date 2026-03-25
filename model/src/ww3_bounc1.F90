@@ -276,26 +276,13 @@ PROGRAM W3BOUNC
     VERBOSE = NML_BOUND%VERBOSE
     FILE = NML_BOUND%FILE
 
-    NBO2 = 0
-    OPEN(NDSL,FILE=TRIM(FILE),STATUS='OLD',IOSTAT=IERR)
-    IF (IERR.NE.0) CALL EXTOPN(NDSE,IERR,'W3BOUNC','SPEC',69,NAMEF=FILE)
-    REWIND (NDSL)
-    DO
-      READ (NDSL,*,IOSTAT=IERR)
-      IF (IERR.LT.0) EXIT
-      IF (IERR.GT.0) THEN
-        WRITE (NDSE,1002) IERR
-        CALL EXTCDE ( 62 )
-      END IF
-      NBO2 = NBO2 + 1
-    END DO
+# OWI Modified ww3_bounc1 allows the input of a single netCDF file
+# thus the SPECFILES array is allocated to 1 and filled with NML_BOUND%FILE
+# rather than reading a list of files (ww3_bounc)
+
+    NBO2 = 1
     ALLOCATE(SPECFILES(NBO2))
-    REWIND (NDSL)
-    DO I=1,NBO2
-      READ (NDSL,'(A512)',IOSTAT=IERR) SPECFILES(I)
-      IF (IERR.NE.0) CALL EXTIOF(NDSE,IERR,'W3BOUNC','INPUT',61,FIELD='SPECFILES')
-    END DO
-    CLOSE(NDSL)
+    SPECFILES(NBO2) = FILE
 
   END IF ! FLGNML
 
