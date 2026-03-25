@@ -276,9 +276,9 @@ PROGRAM W3BOUNC
     VERBOSE = NML_BOUND%VERBOSE
     FILE = NML_BOUND%FILE
 
-# OWI Modified ww3_bounc1 allows the input of a single netCDF file
-# thus the SPECFILES array is allocated to 1 and filled with NML_BOUND%FILE
-# rather than reading a list of files (ww3_bounc)
+! OWI Modified ww3_bounc1 allows the input of a single netCDF file
+! thus the SPECFILES array is allocated to 1 and filled with NML_BOUND%FILE
+! rather than reading a list of files (ww3_bounc)
 
     NBO2 = 1
     ALLOCATE(SPECFILES(NBO2))
